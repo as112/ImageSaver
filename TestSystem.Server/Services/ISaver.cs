@@ -5,6 +5,7 @@ namespace TestSystem.Server.Services
     public interface ISaver<T> where T : BaseFile
     {
         void SaveInfo(T item, string directory);
+        void DeleteInfo(T item, string directory);
         IEnumerable<T> GetList(string directory);
     }
 }

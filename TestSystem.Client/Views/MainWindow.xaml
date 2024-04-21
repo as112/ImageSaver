@@ -3,13 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         xmlns:local="clr-namespace:TestSystem.Client"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         Style="{StaticResource MaterialDesignWindow}"
         DataContext="{Binding MainWindowVM, Source={StaticResource Locator}}"
         Title="{Binding Title}" WindowStartupLocation="CenterScreen"
-        Height="450" Width="800">
+        Height="450" Width="800" Name="MainWindowName">
     <DockPanel>
         <Menu DockPanel.Dock="Top" IsMainMenu="True" Height="18">
             <MenuItem Header="Файл" Height="18" IsEnabled="{Binding IsEnebledWhenRunning}">
@@ -31,10 +32,18 @@
             <ItemsControl ItemsSource="{Binding ImagesWithText}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
-                            <Image Source="{Binding FilePath}" Width="100" Height="100" Margin="5"/>
-                            <TextBlock Text="{Binding AssociatedText}" HorizontalAlignment="Center"/>
-                        </StackPanel>
+                        <Grid>
+                            <Grid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Удалить" Command="{Binding MainWindowVM.DeleteImageCommandAsync, Mode=OneWay, Source={StaticResource Locator}}" 
+                                              CommandParameter="{Binding}" />
+                                </ContextMenu>
+                            </Grid.ContextMenu>
+                            <StackPanel>
+                                <Image Source="{Binding FilePath}" Width="100" Height="100" Margin="5"/>
+                                <TextBlock Text="{Binding AssociatedText}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemsPanel>

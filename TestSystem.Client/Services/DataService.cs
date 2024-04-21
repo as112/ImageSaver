@@ -54,5 +54,16 @@ namespace TestSystem.Client.Services
             return result;
 
         }
+        public async Task<T?> RemoveDataAsync(T item, CancellationToken Cancel = default)
+        {
+            var response = await _httpClient.DeleteAsync($"{_host}/delete/{item.Id}", Cancel)
+                .ConfigureAwait(false);
+            var result = await response
+              .EnsureSuccessStatusCode()
+              .Content
+              .ReadFromJsonAsync<T>(cancellationToken: Cancel)
+              .ConfigureAwait(false);
+            return result;
+        }
     }
 }

@@ -33,7 +33,15 @@ namespace TestSystem.Server.Services
             var json = JsonSerializer.Serialize(_data);
             File.WriteAllText(filePath, json);
         }
-
+        public void DeleteInfo(T item, string directory)
+        {
+            var filePath = Path.Combine(directory, "list.json");
+            
+            _data = ReadFileAndDeserialize(filePath);
+            _data.Remove(item);
+            var json = JsonSerializer.Serialize(_data);
+            File.WriteAllText(filePath, json);
+        }
         private List<T> ReadFileAndDeserialize(string filePath)
         {
             List<T> result = new List<T>();

@@ -9,5 +9,6 @@ namespace TestSystem.Client.Services.Interfaces
     {
         Task<T?> SendDataAsync(T item, CancellationToken cancellationToken = default);
         Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<T?> RemoveDataAsync(T item, CancellationToken Cancel = default);
     }
 }

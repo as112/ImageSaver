@@ -64,4 +64,18 @@ app.MapPost("/img", async (HttpContext context, ISaver<ImageWithText> saver) =>
     return Results.Ok(imageWithText);
 });
 
+app.MapDelete("/delete/{id}", async (Guid id, ISaver<ImageWithText> saver) =>
+{
+    var imageList = saver.GetList(listPath);
+    var imageToDelete = imageList.Where(s => s.Id == id).FirstOrDefault();
+    
+    saver.DeleteInfo(imageToDelete, listPath);
+    var fileName = Path.Combine(imgPath, Path.GetFileName(imageToDelete.FilePath));
+    if (File.Exists(fileName))
+    {
+        File.Delete(fileName);
+        return Results.Ok(imageToDelete);
+    }
+    return Results.NotFound();
+});
 app.Run();

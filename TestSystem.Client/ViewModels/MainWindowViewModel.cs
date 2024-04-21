@@ -27,6 +27,39 @@ namespace TestSystem.Client.ViewModels
         private ObservableCollection<ImageWithText> _imagesWithText;
         public ObservableCollection<ImageWithText> ImagesWithText { get => _imagesWithText; set => Set(ref _imagesWithText, value); }
 
+
+        #region Command DeleteImageCommandAsync
+
+        private ICommand _deleteImageCommandAsync;
+        public ICommand DeleteImageCommandAsync => _deleteImageCommandAsync
+            ??= new LambdaCommandAsync(OnDeleteImageCommandExecutedAsync, DeleteImageCommandExecute);
+
+        private bool DeleteImageCommandExecute(object p) => true;
+        private async Task OnDeleteImageCommandExecutedAsync(object p)
+        {
+            var imageToDelete = p as ImageWithText;
+            try
+            {
+                var deletedItem = await _dataService.RemoveDataAsync(imageToDelete);
+                if (deletedItem != null)
+                {
+                    ImagesWithText.Remove(imageToDelete);
+                    MessageBox.Show("Удалено", "Статус", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Что-то пошло не так", "Статус", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Статус", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+        }
+        #endregion
+
         public MainWindowViewModel(IDataService<ImageWithText> dataService)
         {
             _dataService = dataService;
